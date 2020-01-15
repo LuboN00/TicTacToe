@@ -9,6 +9,7 @@ char optionBoard[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
 
 char turn = 'X';
 char winner;
+int drawCnt = 0;
 bool endGame = false;
 bool draw = false;
 int row, colum;
@@ -18,24 +19,24 @@ void printBoard();
 void printOptionBoard();
 void printAllBoards();
 void playerTurn();
-bool game();
+void winnerChecker();
 
 void printBoard() {
-    cout << board[0][0] << " | " << board[0][1] << " | " << board[0][2] << endl;
-    cout << "- - - - -" << endl;
-    cout << board[1][0] << " | " << board[1][1] << " | " << board[1][2] << endl;
-    cout << "- - - - -" << endl;
-    cout << board[2][0] << " | " << board[2][1] << " | " << board[2][2] << endl;
+    cout << setw(50) << board[0][0] << " | " << board[0][1] << " | " << board[0][2] << endl;
+    cout << setw(60) << "- - - - -" << endl;
+    cout << setw(50) << board[1][0] << " | " << board[1][1] << " | " << board[1][2] << endl;
+    cout << setw(60) << "- - - - -" << endl;
+    cout << setw(50) << board[2][0] << " | " << board[2][1] << " | " << board[2][2] << endl;
 
     return;
 }
 
 void printOptionBoard() {
-    cout << optionBoard[0][0] << " | " << optionBoard[0][1] << " | " << optionBoard[0][2] << endl;
-    cout << "- - - - -" << endl;
-    cout << optionBoard[1][0] << " | " << optionBoard[1][1] << " | " << optionBoard[1][2] << endl;
-    cout << "- - - - -" << endl;
-    cout << optionBoard[2][0] << " | " << optionBoard[2][1] << " | " << optionBoard[2][2] << endl;
+    cout << setw(50) << optionBoard[0][0] << " | " << optionBoard[0][1] << " | " << optionBoard[0][2] << endl;
+    cout << setw(60) << "- - - - -" << endl;
+    cout << setw(50) << optionBoard[1][0] << " | " << optionBoard[1][1] << " | " << optionBoard[1][2] << endl;
+    cout << setw(60) << "- - - - -" << endl;
+    cout << setw(50) << optionBoard[2][0] << " | " << optionBoard[2][1] << " | " << optionBoard[2][2] << endl;
 
     return;
 }
@@ -43,8 +44,8 @@ void printOptionBoard() {
 void printAllBoards() {
     system("cls");
 
-    cout << "Tic Tac Toe" << endl << "For 2 Players" << endl << "Player 1 - 'X'  Player 2 - 'O'" << endl << endl;
-
+    cout << setw(50) << "Tic Tac Toe" << endl << setw(50) << "For 2 Players" << endl << endl << setw(50) << "Player 1 - 'X'  Player 2 - 'O'" << endl << endl;
+ 
     printBoard();
 
     cout << endl << endl;
@@ -56,11 +57,11 @@ void printAllBoards() {
 
 void playerTurn() {
     if (turn == 'X') {
-        cout << "It's player 'X' turn: ";
+        cout << endl << "It's player 'X' turn: ";
     }
 
     else if (turn == 'O') {
-        cout << "It's player 'O' turn: ";
+        cout << endl << "It's player 'O' turn: ";
     }
 
     cin >> choise;
@@ -81,18 +82,22 @@ void playerTurn() {
     if (turn == 'X' && board[row][colum] != 'X' && board[row][colum] != 'O') {
         board[row][colum] = 'X';
         turn = 'O';
+        drawCnt++;
     }
 
     else if (turn == 'O' && board[row][colum] != 'X' && board[row][colum] != 'O') {
         board[row][colum] = 'O';
         turn = 'X';
+        drawCnt++;
     }
 
     else {
         cout << "ERROR! This field is taken!" << endl;
         playerTurn();
     }
-        // Checking winning for rows and colums for 'X'
+}
+
+void winnerChecker() {
 
     for (int i = 0; i < 3; i++) {
         if ((board[i][0] == 'X' && board[i][1] == 'X' && board[i][2] == 'X') || (board[0][i] == 'X' && board[1][i] == 'X' && board[2][i] == 'X')) {
@@ -100,26 +105,33 @@ void playerTurn() {
             endGame = true;
             return;
         }
-        else if ((board[i][0] == 'O' && board[i][1] == 'O' && board[i][2] == 'O') || (board[0][i] == 'O' && board[1][i] == 'O' && board[2][i] == 'O')) {
-            winner = 'O';
-            endGame = true;
-            return;
-        }
-
-        else if ((board[0][0] == 'X' && board[1][1] == 'X' && board[2][2] == 'X') || (board[0][2] == 'X' && board[1][1] == 'X' && board[2][0] == 'X')) {
-            winner = 'X';
-            endGame = true;
-            return;
-        }
-
-        else if ((board[0][0] == 'O' && board[1][1] == 'O' && board[2][2] == 'O') || (board[0][2] == 'O' && board[1][1] == 'O' && board[2][0] == 'O')) {
-            winner = 'O';
-            endGame = true;
-            return;
-        }
-
     }
-    
+
+    for (int i = 0; i < 3; i++) {
+        if ((board[i][0] == 'O' && board[i][1] == 'O' && board[i][2] == 'O') || (board[0][i] == 'O' && board[1][i] == 'O' && board[2][i] == 'O')) {
+            winner = 'O';
+            endGame = true;
+            return;
+        }
+    }
+
+    if ((board[0][0] == 'X' && board[1][1] == 'X' && board[2][2] == 'X') || (board[0][2] == 'X' && board[1][1] == 'X' && board[2][0] == 'X')) {
+        winner = 'X';
+        endGame = true;
+        return;
+    }
+
+    if ((board[0][0] == 'O' && board[1][1] == 'O' && board[2][2] == 'O') || (board[0][2] == 'O' && board[1][1] == 'O' && board[2][0] == 'O')) {
+        winner = 'O';
+        endGame = true;
+        return;
+    }
+
+    if (drawCnt > 8) {
+        draw = true;
+        endGame = true;
+        return;
+    }
 }
 
 int main() {
@@ -127,21 +139,24 @@ int main() {
     while(endGame != true){
         printAllBoards();
         playerTurn();
+        winnerChecker();
     }
 
     if (winner == 'X' && draw == false) {
         printAllBoards();
-        cout << "Player 1 is the WINNER!!!" << endl;
+        cout << endl << "Player 1 is the WINNER!!!" << endl;
         return 0;
     }
     
     else if (winner == 'O' && draw == false) {  
         printAllBoards();
-        cout << "Player 2 is the WINNER!!!" << endl;
+        cout << endl <<"Player 2 is the WINNER!!!" << endl;
         return 0;
     }
 
-    else cout << "The game was DRAW!!!" << endl;
+    else { 
+        cout << "The game was DRAW!!!" << endl;
+    }
 
     return 0;
 }
